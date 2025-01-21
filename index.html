@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Countdown Timer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background 0.5s;
+        }
+
+        .theme-space {
+            background: linear-gradient(135deg, #0b0f2c, #1a1f4b);
+        }
+
+        .theme-nature {
+            background: linear-gradient(135deg, #2c5f2d, #97bc62);
+        }
+
+        .theme-retro {
+            background: linear-gradient(135deg, #ff6b6b, #ffe66d);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .info-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 3;
+        }
+
+        .date-input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .time-box:hover {
+            transform: scale(1.05);
+        }
+
+        .number {
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+        }
+
+        .emoji {
+            position: absolute;
+            font-size: 2rem;
+            cursor: pointer;
+            animation: float 15s linear infinite;
+            z-index: 1;
+            transition: 0.3s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); }
+            100% { transform: translateY(-20vh) rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 2rem 0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0;
+            transition: width 0.5s ease, background 0.3s ease;
+            border-radius: inherit;
+        }
+
+        .heart-burst {
+            position: absolute;
+            pointer-events: none;
+            animation: heartExplosion 1s ease-out forwards;
+            font-size: 1.5rem;
+        }
+
+        @keyframes heartExplosion {
+            0% { transform: scale(0) translateY(0); opacity: 1; }
+            100% { transform: scale(3) translateY(-100px); opacity: 0; }
+        }
+
+        .secret-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: #ff69b4;
+            text-shadow: 0 0 10px #ffffff;
+            animation: rainbow 2s infinite;
+            display: none;
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            25% { color: #ffd700; }
+            50% { color: #00ff00; }
+            75% { color: #00ffff; }
+            100% { color: #ff00ff; }
+        }
+
+        .credits-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 4;
+        }
+
+        .credits-content {
+            background: rgba(255,255,255,0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            backdrop-filter: blur(5px);
+        }
+
+        .credits-content a {
+            color: #1a73e8;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+        }
+
+        .credits-content a:hover {
+            text-decoration: underline;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="theme-space">
+    <button class="info-button" onclick="showCredits()">ℹ️</button>
+    <button class="theme-switch" onclick="changeTheme()">🎨</button>
+    
+    <div class="container">
+        <h1>⏳ Pet Countdown Timer</h1>
+        <input type="datetime-local" id="dateInput" class="date-input">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="countdown" id="countdown">
+            <div class="time-box">
+                <div class="number" id="days">00</div>
+                <div class="label">Days</div>
+            </div>
+            <div class="time-box">
+                <div class="number" id="hours">00</div>
+                <div class="label">Hours</div>
+            </div>
+            <div class="time-box">
+                <div class="number" id="minutes">00</div>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="time-box">
+                <div class="number" id="seconds">00</div>
+                <div class="label">Seconds</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="secret-message" id="secretMessage">YOU LOVE PETS! 🐾</div>
+
+    <div class="credits-modal" id="creditsModal">
+        <div class="credits-content">
+            <h2>About This Project</h2>
+            <p>🧑💻 Created by <strong>Pedroperry</strong></p>
+            <p>🤖 Assisted by DeepSeek AI</p>
+            <a href="https://github.com/Pedroperry" target="_blank">
+                👨💻 Visit Pedroperry's GitHub
+            </a>
+            <a href="https://www.deepseek.com" target="_blank">
+                🚀 Explore DeepSeek
+            </a>
+            <button class="close-button" onclick="hideCredits()">×</button>
+        </div>
+    </div>
+
+    <script>
+        const themes = ['theme-space', 'theme-nature', 'theme-retro'];
+        let currentTheme = 0;
+        let clickCounter = 0;
+
+        function changeTheme() {
+            currentTheme = (currentTheme + 1) % themes.length;
+            document.body.className = themes[currentTheme];
+        }
+
+        const emojis = ['🐶', '🐱'];
+        function createEmoji() {
+            const emoji = document.createElement('div');
+            emoji.className = 'emoji';
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 100 + '%';
+            emoji.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            
+            emoji.onclick = (e) => {
+                clickCounter++;
+                createHeartBurst(e.clientX, e.clientY);
+                if(clickCounter === 7) showSecretMessage();
+                
+                emoji.style.animation = 'none';
+                emoji.style.opacity = '0';
+                setTimeout(() => emoji.remove(), 500);
+            };
+            
+            document.body.appendChild(emoji);
+        }
+
+        function createHeartBurst(x, y) {
+            for(let i = 0; i < 8; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-burst';
+                heart.textContent = '💖';
+                heart.style.left = x + 'px';
+                heart.style.top = y + 'px';
+                heart.style.transform = `rotate(${i * 45}deg)`;
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 1000);
+            }
+        }
+
+        function showSecretMessage() {
+            const message = document.getElementById('secretMessage');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+                clickCounter = 0;
+            }, 3000);
+        }
+
+        let targetDate, interval;
+        const originalLabels = Array.from(document.querySelectorAll('.label')).map(label => label.textContent);
+
+        document.getElementById('dateInput').addEventListener('change', function(e) {
+            clearInterval(interval);
+            targetDate = new Date(e.target.value).getTime();
+            updateCountdown();
+            interval = setInterval(updateCountdown, 1000);
+        });
+
+        function updateCountdown() {
+            if (!targetDate) return;
+
+            const now = Date.now();
+            const diff = targetDate - now;
+            const isPast = diff < 0;
+            const absoluteDiff = Math.abs(diff);
+
+            document.querySelectorAll('.label').forEach((label, index) => {
+                label.textContent = isPast ? `Ago ${originalLabels[index]}` : originalLabels[index];
+            });
+
+            const days = Math.floor(absoluteDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((absoluteDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((absoluteDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((absoluteDiff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+            if (isPast) {
+                document.getElementById('progress').style.width = '100%';
+                document.getElementById('progress').style.background = '#4CAF50';
+            } else {
+                const totalDuration = targetDate - Date.now();
+                const progress = Math.max(100 - (totalDuration / (targetDate - Date.now() + totalDuration)) * 100, 0);
+                document.getElementById('progress').style.width = `${progress}%`;
+                document.getElementById('progress').style.background = '#ff6b6b';
+            }
+        }
+
+        function showCredits() {
+            document.getElementById('creditsModal').style.display = 'flex';
+        }
+
+        function hideCredits() {
+            document.getElementById('creditsModal').style.display = 'none';
+        }
+
+        document.getElementById('creditsModal').addEventListener('click', (e) => {
+            if(e.target === document.getElementById('creditsModal')) {
+                hideCredits();
+            }
+        });
+
+        setInterval(createEmoji, 2000);
+        for(let i = 0; i < 3; i++) setTimeout(createEmoji, i * 1000);
+    </script>
+</body>
+</html>
