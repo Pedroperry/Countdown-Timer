@@ -18,20 +18,12 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            transition: background 0.5s;
+            transition: all 0.5s;
         }
 
-        .theme-space {
-            background: linear-gradient(135deg, #0b0f2c, #1a1f4b);
-        }
-
-        .theme-nature {
-            background: linear-gradient(135deg, #2c5f2d, #97bc62);
-        }
-
-        .theme-retro {
-            background: linear-gradient(135deg, #ff6b6b, #ffe66d);
-        }
+        .theme-space { background: linear-gradient(135deg, #0b0f2c, #1a1f4b); }
+        .theme-nature { background: linear-gradient(135deg, #2c5f2d, #97bc62); }
+        .theme-retro { background: linear-gradient(135deg, #ff6b6b, #ffe66d); }
 
         .container {
             background: rgba(255, 255, 255, 0.1);
@@ -98,9 +90,7 @@
             transition: transform 0.3s;
         }
 
-        .time-box:hover {
-            transform: scale(1.05);
-        }
+        .time-box:hover { transform: scale(1.05); }
 
         .number {
             font-size: 2rem;
@@ -144,6 +134,33 @@
             border-radius: inherit;
         }
 
+        .party-time { animation: partyLights 0.5s infinite; }
+        @keyframes partyLights {
+            0% { background: #ff0000; } 33% { background: #00ff00; }
+            66% { background: #0000ff; } 100% { background: #ff0000; }
+        }
+
+        .secret-message-2 {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .disco-mode .time-box { animation: discoGlow 1s infinite alternate; }
+        @keyframes discoGlow {
+            from { box-shadow: 0 0 10px #ff0000; }
+            to { box-shadow: 0 0 20px #00ff00; }
+        }
+
+        .rotate-title { animation: titleSpin 2s linear infinite; }
+        @keyframes titleSpin {
+            from { transform: rotate(0deg); } to { transform: rotate(360deg); }
+        }
+
         .heart-burst {
             position: absolute;
             pointer-events: none;
@@ -169,10 +186,8 @@
         }
 
         @keyframes rainbow {
-            0% { color: #ff0000; }
-            25% { color: #ffd700; }
-            50% { color: #00ff00; }
-            75% { color: #00ffff; }
+            0% { color: #ff0000; } 25% { color: #ffd700; }
+            50% { color: #00ff00; } 75% { color: #00ffff; }
             100% { color: #ff00ff; }
         }
 
@@ -205,9 +220,7 @@
             margin: 10px 0;
         }
 
-        .credits-content a:hover {
-            text-decoration: underline;
-        }
+        .credits-content a:hover { text-decoration: underline; }
 
         .close-button {
             position: absolute;
@@ -252,6 +265,7 @@
     </div>
 
     <div class="secret-message" id="secretMessage">YOU LOVE PETS! 🐾</div>
+    <div class="secret-message-2" id="secretMessage2">🐾 Secret Discovered! 🎉</div>
 
     <div class="credits-modal" id="creditsModal">
         <div class="credits-content">
@@ -290,12 +304,10 @@
                 clickCounter++;
                 createHeartBurst(e.clientX, e.clientY);
                 if(clickCounter === 7) showSecretMessage();
-                
                 emoji.style.animation = 'none';
                 emoji.style.opacity = '0';
                 setTimeout(() => emoji.remove(), 500);
             };
-            
             document.body.appendChild(emoji);
         }
 
@@ -312,14 +324,63 @@
             }
         }
 
-        function showSecretMessage() {
-            const message = document.getElementById('secretMessage');
-            message.style.display = 'block';
-            setTimeout(() => {
-                message.style.display = 'none';
-                clickCounter = 0;
-            }, 3000);
-        }
+        const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown',
+                          'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+        let konamiIndex = 0;
+        document.addEventListener('keydown', (e) => {
+            if(e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if(konamiIndex === konamiCode.length) {
+                    document.body.classList.add('party-time');
+                    setTimeout(() => document.body.classList.remove('party-time'), 3000);
+                    konamiIndex = 0;
+                }
+            } else konamiIndex = 0;
+        });
+
+        let titleClicks = 0;
+        document.querySelector('h1').addEventListener('click', () => {
+            titleClicks++;
+            if(titleClicks === 3) {
+                document.querySelector('h1').classList.add('rotate-title');
+                setTimeout(() => {
+                    document.querySelector('h1').classList.remove('rotate-title');
+                    titleClicks = 0;
+                }, 2000);
+            }
+        });
+
+        // Special Date set to October 18, 2007
+        const specialDate = new Date('2007-10-18').getTime();
+        document.getElementById('dateInput').addEventListener('change', function(e) {
+            if(new Date(e.target.value).getTime() === specialDate) {
+                const message = document.getElementById('secretMessage2');
+                message.style.display = 'block';
+                setTimeout(() => message.style.display = 'none', 3000);
+            }
+        });
+
+        const petFacts = [
+            "Cats have 32 muscles in each ear!",
+            "Dogs can smell 100,000 times better than humans!",
+            "Cats sleep 12-16 hours per day!",
+            "Dogs have 3 eyelids! 🐾"
+        ];
+        document.querySelector('.container').addEventListener('dblclick', () => {
+            alert(petFacts[Math.floor(Math.random() * petFacts.length)]);
+        });
+
+        let discoCode = [];
+        document.addEventListener('keypress', (e) => {
+            discoCode.push(e.key.toLowerCase());
+            if(discoCode.join('').includes('disco')) {
+                document.body.classList.add('disco-mode');
+                setTimeout(() => {
+                    document.body.classList.remove('disco-mode');
+                    discoCode = [];
+                }, 5000);
+            }
+        });
 
         let targetDate, interval;
         const originalLabels = Array.from(document.querySelectorAll('.label')).map(label => label.textContent);
@@ -373,9 +434,7 @@
         }
 
         document.getElementById('creditsModal').addEventListener('click', (e) => {
-            if(e.target === document.getElementById('creditsModal')) {
-                hideCredits();
-            }
+            if(e.target === document.getElementById('creditsModal')) hideCredits();
         });
 
         setInterval(createEmoji, 2000);
