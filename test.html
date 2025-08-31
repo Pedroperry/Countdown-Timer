@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Countdown Timer Tests</title>
+    <link rel="stylesheet" href="style.css"> <!-- Include style.css to avoid potential visual errors if script interacts with styles -->
+</head>
+<body>
+    <!-- Minimal DOM structure for script.js to initialize without errors -->
+    <h1>Pet Countdown Timer Test Page</h1>
+    <input type="datetime-local" id="dateInput">
+    
+    <div class="container">
+        <!-- Mock container element -->
+    </div>
+
+    <div class="countdown" id="countdown">
+        <div class="time-box">
+            <div class="number" id="days">00</div>
+            <div class="label">Days</div>
+        </div>
+        <div class="time-box">
+            <div class="number" id="hours">00</div>
+            <div class="label">Hours</div>
+        </div>
+        <div class="time-box">
+            <div class="number" id="minutes">00</div>
+            <div class="label">Minutes</div>
+        </div>
+        <div class="time-box">
+            <div class="number" id="seconds">00</div>
+            <div class="label">Seconds</div>
+        </div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+
+    <div class="credits-modal" id="creditsModal">
+        <!-- Mock modal -->
+    </div>
+    <div class="secret-message" id="secretMessage"></div>
+    <div class="secret-message-2" id="secretMessage2"></div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="test_runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.5s;
+}
+
+.theme-space { background: linear-gradient(135deg, #0b0f2c, #1a1f4b); }
+.theme-nature { background: linear-gradient(135deg, #2c5f2d, #97bc62); }
+.theme-retro { background: linear-gradient(135deg, #ff6b6b, #ffe66d); }
+.theme-ocean { background: linear-gradient(135deg, #0077be, #00c2cb); }
+.theme-forest { background: linear-gradient(135deg, #228b22, #8b4513); }
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.theme-switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.info-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    z-index: 3;
+}
+
+.date-input {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+}
+
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.time-box {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1.5rem;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.time-box:hover { transform: scale(1.05); }
+
+.number {
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+}
+
+.label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+}
+
+.emoji {
+    position: absolute;
+    font-size: 2rem;
+    cursor: pointer;
+    animation: float 15s linear infinite;
+    z-index: 1;
+    transition: 0.3s;
+}
+
+@keyframes float {
+    0% { transform: translateY(110vh) rotate(0deg); }
+    100% { transform: translateY(-20vh) rotate(360deg); }
+}
+
+.progress-bar {
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 2rem 0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 0;
+    transition: width 0.5s ease, background 0.3s ease;
+    border-radius: inherit;
+}
+
+.party-time { animation: partyLights 0.5s infinite; }
+@keyframes partyLights {
+    0% { background: #ff0000; } 33% { background: #00ff00; }
+    66% { background: #0000ff; } 100% { background: #ff0000; }
+}
+
+.secret-message-2 {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    display: none;
+}
+
+.disco-mode .time-box { animation: discoGlow 1s infinite alternate; }
+@keyframes discoGlow {
+    from { box-shadow: 0 0 10px #ff0000; }
+    to { box-shadow: 0 0 20px #00ff00; }
+}
+
+.rotate-title { animation: titleSpin 2s linear infinite; }
+@keyframes titleSpin {
+    from { transform: rotate(0deg); } to { transform: rotate(360deg); }
+}
+
+.heart-burst {
+    position: absolute;
+    pointer-events: none;
+    animation: heartExplosion 1s ease-out forwards;
+    font-size: 1.5rem;
+}
+
+@keyframes heartExplosion {
+    0% { transform: scale(0) translateY(0); opacity: 1; }
+    100% { transform: scale(3) translateY(-100px); opacity: 0; }
+}
+
+.secret-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: #ff69b4;
+    text-shadow: 0 0 10px #ffffff;
+    animation: rainbow 2s infinite;
+    display: none;
+}
+
+@keyframes rainbow {
+    0% { color: #ff0000; } 25% { color: #ffd700; }
+    50% { color: #00ff00; } 75% { color: #00ffff; }
+    100% { color: #ff00ff; }
+}
+
+.credits-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+}
+
+.credits-content {
+    background: rgba(255,255,255,0.9);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 400px;
+    backdrop-filter: blur(5px);
+}
+
+.credits-content a {
+    color: #1a73e8;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+}
+
+.credits-content a:hover { text-decoration: underline; }
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}

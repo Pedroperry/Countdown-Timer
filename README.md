@@ -68,6 +68,7 @@ A fun and interactive countdown timer featuring flying pets, theme customization
 
 - **Author**: [Pedroperry](https://github.com/Pedroperry)
 - **AI Assistant**: [DeepSeek](https://www.deepseek.com)
+- **AI assistance by**: Jules
 - **Emojis**: Twemoji (Open Source)
 - **Inspiration**: Pet lovers everywhere 🐾
 
